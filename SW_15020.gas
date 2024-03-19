@@ -1,0 +1,17 @@
+Program.Sub.ScreenSU.Start
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+Variable.Local.sUserGroups.Declare(String)
+Variable.Local.bChk.Declare(Boolean)
+Variable.passed.000011.set("N")
+Function.Intrinsic.UI.ChangeCallerProperty(variable.passed.000011, "LOCK", 1)
+Function.Intrinsic.UI.ChangeCallerProperty(variable.passed.000011, "HIDE", 1)
+Function.Intrinsic.UI.ChangeCallerProperty(variable.passed.000011,"TABSTOP", 0)
+Function.Intrinsic.UI.ChangeCallerProperty(variable.passed.000236, "LOCK", 1)
+Function.Intrinsic.UI.ChangeCallerProperty(variable.passed.000236, "HIDE", 1)
+Function.Intrinsic.UI.ChangeCallerProperty(variable.passed.000236,"TABSTOP", 0)
+Program.Sub.Main.end
