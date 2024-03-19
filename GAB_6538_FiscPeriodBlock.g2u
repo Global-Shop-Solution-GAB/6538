@@ -1,0 +1,268 @@
+﻿Program.Sub.ScreenSU.Start
+Gui.F_MantPeriodoFiscal..Create(BaseForm)
+Gui.F_MantPeriodoFiscal..Caption("Mantenimiento de Fechas ")
+Gui.F_MantPeriodoFiscal..Size(10305,5160)
+Gui.F_MantPeriodoFiscal..MinX(0)
+Gui.F_MantPeriodoFiscal..MinY(0)
+Gui.F_MantPeriodoFiscal..Position(0,0)
+Gui.F_MantPeriodoFiscal..AlwaysOnTop(False)
+Gui.F_MantPeriodoFiscal..FontName("Tahoma")
+Gui.F_MantPeriodoFiscal..FontSize(8.25)
+Gui.F_MantPeriodoFiscal..ControlBox(True)
+Gui.F_MantPeriodoFiscal..MaxButton(True)
+Gui.F_MantPeriodoFiscal..MinButton(True)
+Gui.F_MantPeriodoFiscal..MousePointer(0)
+Gui.F_MantPeriodoFiscal..Moveable(True)
+Gui.F_MantPeriodoFiscal..Sizeable(True)
+Gui.F_MantPeriodoFiscal..ShowInTaskBar(True)
+Gui.F_MantPeriodoFiscal..TitleBar(True)
+Gui.F_MantPeriodoFiscal..Event(UnLoad,F_MantPeriodoFiscal_UnLoad)
+Gui.F_MantPeriodoFiscal.lblQuest.Create(Label,"Seleccione el periodo fiscal permitido para entradas de almacen",True,5505,240,0,2205,630,True,0,"Tahoma",10,,0,0)
+Gui.F_MantPeriodoFiscal.lblQuest.BorderStyle(0)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Create(Button)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Enabled(True)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Visible(True)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Zorder(0)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Size(1935,345)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Position(5505,1335)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Caption("Buscar Periodo")
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.FontName("Tahoma")
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.FontSize(8.25)
+Gui.F_MantPeriodoFiscal.cmdFiscBrowser.Event(Click,cmdFiscBrowser_Click)
+Gui.F_MantPeriodoFiscal.txtPeriodo.Create(TextBox,"",True,1425,300,0,3675,1335,True,0,"Tahoma",8.25,,1)
+Gui.F_MantPeriodoFiscal.txtPeriodo.Locked(True)
+Gui.F_MantPeriodoFiscal.lblPeriodo.Create(Label,"Periodo: ",True,52,16,0,264,80,True,0,"Tahoma",10,,0,0)
+Gui.F_MantPeriodoFiscal.lblPeriodo.BorderStyle(0)
+Gui.F_MantPeriodoFiscal.txtInicio.Create(TextBox,"",True,1440,300,0,3390,2070,True,0,"Tahoma",8.25,,1)
+Gui.F_MantPeriodoFiscal.txtInicio.Locked(True)
+Gui.F_MantPeriodoFiscal.txtFin.Create(TextBox,"",True,1365,300,0,5640,2085,True,0,"Tahoma",8.25,,1)
+Gui.F_MantPeriodoFiscal.txtFin.Locked(True)
+Gui.F_MantPeriodoFiscal.lblInicio.Create(Label,"Inicio",True,450,240,0,2475,2070,True,0,"Tahoma",10,,0,0)
+Gui.F_MantPeriodoFiscal.lblInicio.BorderStyle(0)
+Gui.F_MantPeriodoFiscal.lblInicio.DefaultValue("")
+Gui.F_MantPeriodoFiscal.lblFin.Create(Label,"Fin",True,255,240,0,5295,2085,True,0,"Tahoma",10,,0,0)
+Gui.F_MantPeriodoFiscal.lblFin.BorderStyle(0)
+Gui.F_MantPeriodoFiscal.cmdSave.Create(Button)
+Gui.F_MantPeriodoFiscal.cmdSave.Enabled(True)
+Gui.F_MantPeriodoFiscal.cmdSave.Visible(True)
+Gui.F_MantPeriodoFiscal.cmdSave.Zorder(0)
+Gui.F_MantPeriodoFiscal.cmdSave.Size(2445,630)
+Gui.F_MantPeriodoFiscal.cmdSave.Position(6510,3600)
+Gui.F_MantPeriodoFiscal.cmdSave.Caption("Guardar")
+Gui.F_MantPeriodoFiscal.cmdSave.FontName("Tahoma")
+Gui.F_MantPeriodoFiscal.cmdSave.FontSize(8.25)
+Gui.F_MantPeriodoFiscal.cmdSave.Event(Click,cmdSave_Click)
+Gui.F_MantPeriodoFiscal.lblModifiedby.Create(Label,"Modificado por:",True,1110,195,0,495,2940,True,0,"Tahoma",8.25,,0,0)
+Gui.F_MantPeriodoFiscal.lblModifiedby.BorderStyle(0)
+Gui.F_MantPeriodoFiscal.txtModfiedby.Create(TextBox,"",True,2190,300,0,1950,2895,True,0,"Tahoma",8.25,,1)
+Gui.F_MantPeriodoFiscal.txtModfiedby.Locked(True)
+Gui.F_MantPeriodoFiscal.txtChangeDate.Create(TextBox,"",True,1755,300,0,4155,2895,True,0,"Tahoma",8.25,,1)
+Gui.F_MantPeriodoFiscal.txtChangeDate.Locked(True)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'This project is for Spanish Speaking Customers who want to block the option to create orders outside of the fiscal period
+V.Local.sError.Declare(String)
+v.Local.bExistTable.Declare
+F.Intrinsic.Control.Try
+	F.ODBC.Connection!CON.OpenCompanyConnection
+	
+	
+		'check if custom table exists
+		F.ODBC.Connection!con.TableExists("GAB_6538_FiscPeriod",v.Local.bExistTable)
+	f.Intrinsic.Control.If(v.Local.bExistTable.Not)
+		F.ODBC.Connection!con.Execute("CREATE TABLE GAB_6538_FiscPeriod( PERIOD CHAR(2), BEG_DATE CHAR(10), END_DATE CHAR(10), LAST_DATE_CHG CHAR(8), LAST_USR_CHG CHAR(50));CREATE UNIQUE INDEX GAB_6538_K00 ON GAB_6538_FiscPeriod(PERIOD);;")
+	f.Intrinsic.Control.EndIf
+	
+	'System Support > Administration > 
+	F.Intrinsic.Control.If(v.Caller.Switches,=,"P")
+		F.Intrinsic.Control.CallSub(F_MantPeriodoFiscal_Load)
+		GUI.F_MantPeriodoFiscal..Show
+	'Purchasing > Transactions > P.O. Receipts PRESAVE
+	F.Intrinsic.Control.ElseIf(v.Caller.Hook,=,15030)
+		f.Intrinsic.Control.CallSub(ReceiveDateCheck)
+
+	F.Intrinsic.Control.EndIf
+
+	
+
+		
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub(F_MantPeriodoFiscal_UnLoad)
+	F.Intrinsic.Control.End
+F.Intrinsic.Control.EndTry
+
+Program.Sub.Main.End
+
+Program.Sub.cmdFiscBrowser_Click.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare(String)
+	V.Local.sRet.Declare(String)
+	V.Local.sTitles.Declare(String)
+	V.Local.iWidths.Declare(long)
+
+	
+	'Load Custom Browser from Custom Table GAB_6538_FiscPeriod Into Form
+	F.Intrinsic.String.Split("AÑO*!*PERIODO*!*INICIO*!*FINAL","*!*",V.Local.sTitles)
+	F.Intrinsic.String.Split("200*!*200*!*500*!*500","*!*",V.Local.iWidths)
+	F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+	F.Intrinsic.UI.Browser("SELECCIONE PERIODO FISCAL","CON","select Start_YEAR,PERIOD,BEG_DATE,END_DATE from GL_CALENDAR ORDER BY Start_YEAR DESC,PERIOD ",V.Local.sTitles,V.Local.iWidths,V.Local.sRet)
+	F.Intrinsic.Control.If(V.Local.sRet,"=","***CANCEL***")
+	 F.Intrinsic.Control.Else
+	
+	 F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	 	gui.F_MantPeriodoFiscal.txtPeriodo.Text(V.Local.sRet(1).trim)
+		gui.F_MantPeriodoFiscal.txtInicio.Text(V.Local.sRet(2).trim)
+		gui.F_MantPeriodoFiscal.txtFin.Text(V.Local.sRet(3).trim)
+		gui.F_MantPeriodoFiscal.txtModfiedby.Text(V.Caller.User)
+		gui.F_MantPeriodoFiscal.txtChangeDate.Text(V.Ambient.Date)
+	F.Intrinsic.Control.EndIf
+		
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub(F_MantPeriodoFiscal_UnLoad)
+	F.Intrinsic.Control.End
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdFiscBrowser_Click.End
+
+
+Program.Sub.cmdSave_Click.Start
+F.Intrinsic.Control.Try 	
+
+	V.Local.sError.Declare
+	v.Local.sPeriodCheck.Declare
+	V.Local.sSQL2.Declare
+	v.Local.sPeriod.Declare
+	v.Local.sBegDate.Declare
+	v.Local.sEndDate.Declare
+	v.Local.sUser.Declare
+	v.Local.sChgDate.Declare
+
+	v.Local.sPeriod.Set(v.Screen.F_MantPeriodoFiscal!txtPeriodo.Text)
+	v.Local.sBegDate.Set(v.Screen.F_MantPeriodoFiscal!txtInicio.Text)
+	v.Local.sEndDate.Set(v.Screen.F_MantPeriodoFiscal!txtFin.Text)
+	v.Local.sUser.Set(V.Caller.User)
+	v.Local.sChgDate.Set(V.Ambient.Date.FormatYYYY-MM-DD)
+
+
+
+	'SAVE INFORMATION FROM FORM INTO CUSTOM TABLE GAB_6538_FiscPeriod
+	F.ODBC.Connection!con.ExecuteAndReturn("select count(PERIOD) from GAB_6538_FiscPeriod",v.Local.sPeriodCheck)
+	
+	f.Intrinsic.Control.If(v.Local.sPeriodCheck,=,"0")
+		F.Intrinsic.String.Build("INSERT INTO GAB_6538_FiscPeriod(PERIOD,BEG_DATE,END_DATE,LAST_DATE_CHG,LAST_USR_CHG) VALUES('{0}','{1}','{2}','{3}','{4}');",v.Local.sPeriod,v.Local.sBegDate,v.Local.sEndDate,	v.Local.sUser,v.Local.sChgDate,V.Local.sSQL2)
+		F.ODBC.Connection!con.Execute(V.Local.sSQL2)	
+		f.Intrinsic.UI.Msgbox("INFORMACION GUARDADA")
+	f.Intrinsic.Control.Else
+		F.Intrinsic.String.Build("UPDATE GAB_6538_FiscPeriod SET PERIOD = '{0}', BEG_DATE = '{1}', END_DATE = '{2}',LAST_DATE_CHG = '{3}',LAST_USR_CHG = '{4}' ;",v.Local.sPeriod,v.Local.sBegDate,v.Local.sEndDate,	v.Local.sUser,v.Local.sChgDate,V.Local.sSQL2)
+		F.ODBC.Connection!con.Execute(V.Local.sSQL2)	
+		f.Intrinsic.UI.Msgbox("INFORMACION GUARDADA")
+	f.Intrinsic.Control.EndIf
+	
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub(F_MantPeriodoFiscal_UnLoad)
+	F.Intrinsic.Control.End
+F.Intrinsic.Control.EndTry
+Program.Sub.cmdSave_Click.End
+
+Program.Sub.F_MantPeriodoFiscal_Load.Start
+F.Intrinsic.Control.Try
+	V.Local.sError.Declare(String)
+	v.local.sPeriod.Declare
+	
+	'Load Existing Data into Form searching from custom table GAB_6538_FiscPeriod
+	
+	'F.ODBC.Connection!CON.ExecuteAndReturn("select distinct PERIOD from GAB_6538_FiscPeriod",v.Local.sPeriod)
+	
+	F.ODBC.Connection!CON.OpenRecordsetRO("rstSOLoad","select * from GAB_6538_FiscPeriod")
+	F.Intrinsic.Control.If(V.ODBC.CON!rstSOLoad.EOF,=,"False")
+		gui.F_MantPeriodoFiscal.txtPeriodo.Text(V.ODBC.CON!rstSOLoad.FieldValTrim!PERIOD)
+		gui.F_MantPeriodoFiscal.txtInicio.Text(V.ODBC.CON!rstSOLoad.FieldValTrim!BEG_DATE)
+		gui.F_MantPeriodoFiscal.txtFin.Text(V.ODBC.CON!rstSOLoad.FieldValTrim!BEG_DATE)
+		gui.F_MantPeriodoFiscal.txtModfiedby.Text(V.ODBC.CON!rstSOLoad.FieldValTrim!LAST_DATE_CHG)
+		gui.F_MantPeriodoFiscal.txtChangeDate.Text(V.ODBC.CON!rstSOLoad.FieldValTrim!LAST_USR_CHG)
+	F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.Catch
+	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+	f.Intrinsic.Control.CallSub(F_MantPeriodoFiscal_UnLoad)
+	F.Intrinsic.Control.End
+F.Intrinsic.Control.EndTry
+Program.Sub.F_MantPeriodoFiscal_Load.End
+
+
+
+Program.Sub.ReceiveDateCheck.Start
+'F.Intrinsic.Control.Try
+v.Local.sDate.Declare
+V.Local.sDateNew.Declare
+v.Local.sDateYEAR.Declare
+v.Local.sDateMonth.Declare
+v.Local.sDateDay.Declare
+v.Local.dBegDate.Declare
+V.Local.SBegDate.Declare
+v.Local.dEndDate.Declare
+V.Local.SEndDate.Declare
+
+	V.Local.sDate.Set(V.Passed.000009)
+	
+	f.Intrinsic.String.Left(V.Local.sDate,4,v.Local.sDateYEAR)
+	f.Intrinsic.String.Mid(V.Local.sDate,4,2,v.Local.sDateMonth)
+	f.Intrinsic.String.Right(V.Local.sDate,2,v.Local.sDateDay)
+		
+	f.Intrinsic.String.Build("{0}-{1}-{2}",v.Local.sDateYEAR,v.Local.sDateMonth,v.Local.sDateDay,v.Local.sDateNew)
+	'f.Intrinsic.UI.Msgbox(v.Local.sDateNew)
+
+	
+	F.ODBC.Connection!con.ExecuteAndReturn("select BEG_DATE from GAB_6538_FiscPeriod",V.Local.SBegDate)
+	F.Intrinsic.Date.ConvertDString(V.Local.SBegDate,"YYYYMMDD", variable.local.dBegDate)
+	F.ODBC.Connection!con.ExecuteAndReturn("select END_DATE from GAB_6538_FiscPeriod",V.Local.SEndDate)
+	F.Intrinsic.Date.ConvertDString(V.Local.SEndDate,"YYYYMMDD", variable.local.dEndDate)	
+	
+	
+	
+	F.Intrinsic.Control.If(V.Passed.000009,>=,V.Local.dBegDate,"AND",V.Passed.000009,<=,V.Local.dEndDate)
+		''f.Intrinsic.UI.Msgbox(v.Local.sDateNew)
+		f.Intrinsic.UI.Msgbox("Fecha se encuentra en el periodo fiscal")
+	f.Intrinsic.Control.Else
+		f.Intrinsic.UI.Msgbox("Fecha no se encuentra en el periodo fiscal, favor de contactar al administrador de periodo fiscal")
+		V.Passed.777777.Set(1)
+	F.Intrinsic.Control.EndIf
+	'IF date not on fiscal month then stop save
+	
+'	V.Passed.777777.Set(1)
+
+
+'F.Intrinsic.Control.Catch
+'	F.Intrinsic.String.Build("Project: {0}{1}{1}Subroutine: {2}{1}Error Occurred {3} with description {4}{1}{1}GAB Version: {5}",V.Ambient.ScriptPath,V.Ambient.Newline,V.Ambient.CurrentSubroutine,V.Ambient.ErrorNumber,V.Ambient.ErrorDescription,V.Ambient.GABVersion,V.Local.sError)
+'	F.Intrinsic.UI.Msgbox(V.Local.sError)
+'	f.Intrinsic.Control.CallSub(F_MantPeriodoFiscal_UnLoad)
+'	F.Intrinsic.Control.End
+F.Intrinsic.Control.EndTry
+Program.Sub.ReceiveDateCheck.End
+
+
+Program.Sub.F_MantPeriodoFiscal_UnLoad.Start
+
+
+
+	F.ODBC.Connection!CON.Close
+	F.Intrinsic.Control.End
+
+
+Program.Sub.F_MantPeriodoFiscal_UnLoad.End
+
+Program.Sub.Comments.Start
+${$5$}$20.1.8649.24509$}$1
+${$6$}$acardenas$}$20231020111519484$}$WOCvtxu6/EPnAvQJE4I+q+v5cNawXCaAPFm5JNb/FRtU8wn3Yg7rePZSUgKxoyOw37SMJLRb6JxrCj8uAQfJcg==
+Program.Sub.Comments.End
